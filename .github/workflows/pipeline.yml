@@ -1,0 +1,43 @@
+name: CI/CD Pipeline
+
+# Runs every time you push to main branch
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    # Fresh Linux machine provided by GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Download your code onto GitHub's machine
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Node.js on GitHub's machine
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Install node_modules
+      - name: Install dependencies
+        run: npm install
+
+      # Build Docker image tagged with your Docker Hub username
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/get-rank:latest .
+
+      # Login to Docker Hub using your saved secrets
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      # Push image to Docker Hub
+      - name: Push to Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/get-rank:latest
+
+      # Deploy to Kubernetes
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f deployment.yaml

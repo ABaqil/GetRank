@@ -1,9 +1,12 @@
 name: CI/CD Pipeline
 
 # Runs every time you push to main branch
+name: CI/CD Pipeline
+
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:      # ← add this line, allows manual trigger
 
 jobs:
   build-and-deploy:

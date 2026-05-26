@@ -28,7 +28,7 @@ jobs:
 
       # Build Docker image tagged with your Docker Hub username
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/get-rank:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/get-rank .
 
       # Login to Docker Hub using your saved secrets
       - name: Login to Docker Hub
@@ -36,7 +36,7 @@ jobs:
 
       # Push image to Docker Hub
       - name: Push to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/get-rank:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/get-rank
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
